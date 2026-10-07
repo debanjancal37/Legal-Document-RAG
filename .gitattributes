@@ -1,0 +1,2 @@
+models/legal_judgment_chunks.pkl filter=lfs diff=lfs merge=lfs -text
+models/legal_judgment_faiss.index filter=lfs diff=lfs merge=lfs -text
