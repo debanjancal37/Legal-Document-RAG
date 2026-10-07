@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LegalRAG | Legal Knowledge Retrieval</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="top-header">
+
+    <div class="header-inner">
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <span>⚖</span>
+            </div>
+
+            <div class="brand-text">
+
+                <h1>LegalRAG</h1>
+
+                <p>
+                    Legal Knowledge Retrieval
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="system-status">
+
+            <span class="status-dot"></span>
+
+            <span>
+                RAG System Online
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<main class="main-container">
+
+
+    <!-- =====================================================
+         HERO SECTION
+         ===================================================== -->
+
+    <section class="hero-section">
+
+        <div class="hero-badge">
+
+            <span class="hero-badge-dot"></span>
+
+            AI-Powered Legal Intelligence
+
+        </div>
+
+
+        <h2>
+
+            Legal Knowledge
+
+            <span>
+                Retrieval System
+            </span>
+
+        </h2>
+
+
+        <p>
+
+            Retrieve relevant Indian Supreme Court judgments and
+            generate grounded answers using Retrieval-Augmented Generation.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         QUERY CARD
+         ===================================================== -->
+
+    <section class="query-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="card-header">
+
+            <div class="card-header-left">
+
+                <div class="card-icon">
+                    ⚖
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Legal Case Query
+                    </h3>
+
+                    <p>
+                        Enter a case name and ask a question about the judgment.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             CASE NAME
+             ================================================= -->
+
+        <div class="form-group">
+
+            <label for="caseName">
+                Case Name
+            </label>
+
+
+            <div class="input-wrapper">
+
+                <span class="input-icon">
+                    ⌕
+                </span>
+
+
+                <input
+                    type="text"
+                    id="caseName"
+                    name="caseName"
+                    placeholder="e.g. Kikiben Ors vs Balvantlal Shivlal"
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             QUESTION
+             ================================================= -->
+
+        <div class="form-group">
+
+            <label for="question">
+                Your Question
+            </label>
+
+
+            <div class="textarea-wrapper">
+
+                <span class="textarea-icon">
+                    ?
+                </span>
+
+
+                <textarea
+                    id="question"
+                    name="question"
+                    rows="4"
+                    placeholder="e.g. What was the final decision of the court?"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ASK BUTTON
+             ================================================= -->
+
+        <!-- IMPORTANT:
+             ID = askBtn
+             This must match script.js
+        -->
+
+        <button
+            type="button"
+            id="askBtn"
+            class="ask-button"
+        >
+
+            <span class="button-icon">
+                ↗
+            </span>
+
+
+            <span class="button-text">
+                ASK LEGAL QUESTION
+            </span>
+
+
+            <span class="button-loader"></span>
+
+        </button>
+
+
+
+        <!-- SHORTCUT -->
+
+        <p class="shortcut-hint">
+
+            Press <strong>Ctrl + Enter</strong>
+            to submit your question
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ANSWER SECTION
+         ===================================================== -->
+
+    <section
+        id="answerSection"
+        class="answer-section hidden"
+    >
+
+
+        <!-- =================================================
+             ANSWER HEADER
+             ================================================= -->
+
+        <div class="answer-header">
+
+
+            <div class="answer-title-group">
+
+
+                <div class="answer-icon">
+                    ✓
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Legal Answer
+                    </h2>
+
+
+                    <p>
+                        Answer generated from the retrieved judgment context
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MODEL BADGE -->
+
+            <span
+                id="modelName"
+                class="model-badge"
+            >
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ANSWER CONTENT
+             ================================================= -->
+
+        <div
+            id="answerText"
+            class="answer-content"
+        >
+        </div>
+
+
+
+        <!-- =================================================
+             RETRIEVED SOURCES
+             ================================================= -->
+
+        <div class="sources-section">
+
+
+            <!-- SOURCES HEADER -->
+
+            <div class="sources-header">
+
+
+                <div class="sources-title-group">
+
+
+                    <div class="sources-icon">
+                        ◈
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            Retrieved Judgment Sources
+                        </h3>
+
+
+                        <p>
+                            Relevant documents used to generate the answer
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SOURCE COUNT -->
+
+                <span
+                    id="sourceCount"
+                    class="source-count"
+                >
+                    0 Sources
+                </span>
+
+            </div>
+
+
+
+            <!-- SOURCES CONTAINER -->
+
+            <div
+                id="sourcesContainer"
+                class="sources-container"
+            >
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         WORKFLOW SECTION
+         ===================================================== -->
+
+    <section class="workflow-section">
+
+
+        <div class="workflow-heading">
+
+            <span>
+                HOW IT WORKS
+            </span>
+
+
+            <h3>
+                From Query to Legal Insight
+            </h3>
+
+        </div>
+
+
+
+        <div class="workflow-grid">
+
+
+            <!-- =================================================
+                 STEP 1
+                 ================================================= -->
+
+            <div class="workflow-card">
+
+                <div class="workflow-number">
+                    01
+                </div>
+
+
+                <div class="workflow-icon">
+                    ⌕
+                </div>
+
+
+                <h4>
+                    Query
+                </h4>
+
+
+                <p>
+                    Enter a legal case name and your question.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STEP 2
+                 ================================================= -->
+
+            <div class="workflow-card">
+
+                <div class="workflow-number">
+                    02
+                </div>
+
+
+                <div class="workflow-icon">
+                    ◈
+                </div>
+
+
+                <h4>
+                    Retrieve
+                </h4>
+
+
+                <p>
+                    Relevant judgment passages are retrieved using semantic search.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STEP 3
+                 ================================================= -->
+
+            <div class="workflow-card">
+
+                <div class="workflow-number">
+                    03
+                </div>
+
+
+                <div class="workflow-icon">
+                    ✦
+                </div>
+
+
+                <h4>
+                    Generate
+                </h4>
+
+
+                <p>
+                    The language model generates an answer from retrieved context.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STEP 4
+                 ================================================= -->
+
+            <div class="workflow-card">
+
+                <div class="workflow-number">
+                    04
+                </div>
+
+
+                <div class="workflow-icon">
+                    ✓
+                </div>
+
+
+                <h4>
+                    Verify
+                </h4>
+
+
+                <p>
+                    Review the retrieved judgment sources supporting the answer.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         DISCLAIMER
+         ===================================================== -->
+
+    <div class="disclaimer">
+
+        <span class="disclaimer-icon">
+            ⓘ
+        </span>
+
+
+        <p>
+
+            This system is designed for research and educational purposes.
+            Retrieved information should not be considered legal advice.
+
+        </p>
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer class="footer">
+
+    <p>
+
+        LegalRAG
+
+        &nbsp;•&nbsp;
+
+        Retrieval-Augmented Legal Knowledge System
+
+    </p>
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+
+</html>
